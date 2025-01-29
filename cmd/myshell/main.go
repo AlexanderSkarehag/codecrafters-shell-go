@@ -30,7 +30,7 @@ loop:
 			os.Exit(0)
 			break loop
 		case strings.Contains(command, "echo"):
-			fmt.Println(strings.TrimSpace(strings.Trim(command, "echo")))
+			fmt.Println(strings.TrimSpace(strings.TrimLeft(command, "echo")))
 		default:
 			fmt.Println(command + ": command not found")
 		}
