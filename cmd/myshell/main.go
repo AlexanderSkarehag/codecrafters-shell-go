@@ -25,10 +25,12 @@ loop:
 		}
 
 		command = strings.TrimSpace(command)
-		switch command {
-		case "exit 0":
+		switch {
+		case command == "exit 0":
 			os.Exit(0)
 			break loop
+		case strings.Contains(command, "echo"):
+			fmt.Println(strings.Trim(command, "echo"))
 		default:
 			fmt.Println(command + ": command not found")
 		}
