@@ -22,8 +22,14 @@ loop:
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "Error reading input:", err)
 			break loop
-		} else {
-			command = strings.TrimSpace(command)
+		}
+
+		command = strings.TrimSpace(command)
+		switch command {
+		case "exit 0":
+			os.Exit(0)
+			break loop
+		default:
 			fmt.Println(command + ": command not found")
 		}
 	}
