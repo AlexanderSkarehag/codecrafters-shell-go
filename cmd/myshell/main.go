@@ -75,9 +75,8 @@ loop:
 			checkIfBuiltin(strings.TrimSpace(args))
 		default:
 			if isExec {
-				/*allArgs := strings.Split(command, " ")*/
 				c := exec.Command(cmd, args)
-				output, err := c.CombinedOutput()
+				output, err := c.Output()
 				if err != nil {
 					log.Printf("Command finished with error: %v", err)
 				}
