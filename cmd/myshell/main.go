@@ -11,14 +11,24 @@ import (
 // Ensures gofmt doesn't remove the "fmt" import in stage 1 (feel free to remove this!)
 var _ = fmt.Fprint
 
-func checkIfBuiltin(cmd string) {
+func checkIfExcec(s string) string {
+	path, err := exec.LookPath(s)
+	if err == nil {
+		return path
+	}
+	return ""
+
+}
+func checkIfBuiltin(cmd string, execPath string) {
 
 	s := ""
-	res, err := exec.LookPath(cmd)
-	if err != nil {
+	/*
+		res, err := exec.LookPath(cmd)
+	*/
+	if execPath == "" {
 		s = cmd + ": not found"
 	} else {
-		s = cmd + " is " + res
+		s = cmd + " is " + execPath
 	}
 
 	switch cmd {
@@ -55,6 +65,7 @@ loop:
 		if len(paths) > 1 {
 			args = paths[1]
 		}
+		execPath := checkIfExcec(cmd)
 
 		switch cmd {
 		case "exit":
@@ -65,9 +76,13 @@ loop:
 		case "echo":
 			fmt.Println(strings.TrimSpace(args))
 		case "type":
-			checkIfBuiltin(strings.TrimSpace(args))
+			checkIfBuiltin(strings.TrimSpace(args), execPath)
 		default:
-			fmt.Println(command + ": command not found")
+			if execPath != "" {
+				exec.Command(cmd, args)
+			} else {
+				fmt.Println(command + ": command not found")
+			}
 		}
 	}
 }
