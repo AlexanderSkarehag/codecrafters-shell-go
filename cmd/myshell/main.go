@@ -75,14 +75,7 @@ loop:
 			checkIfBuiltin(strings.TrimSpace(args))
 		default:
 			if isExec {
-				p, err := exec.LookPath(cmd)
-				if err != nil {
-					fmt.Println("Error with LookPath!")
-				}
-				/*
-					fmt.Printf("Path for %v is %v. \n With args %v \n", cmd, p, args)
-				*/
-				c := exec.Command(p, args)
+				c := exec.Command(cmd, args)
 				if err := c.Run(); err != nil {
 					log.Printf("Command finished with error: %v", err)
 				}
