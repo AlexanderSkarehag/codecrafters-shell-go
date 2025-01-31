@@ -39,11 +39,11 @@ func checkIfBuiltin(cmd string) {
 	}
 }
 func main() {
+
+	// Uncomment this block to pass the first stage
+	fmt.Fprint(os.Stdout, "$ ")
 loop:
 	for {
-		// Uncomment this block to pass the first stage
-		fmt.Fprint(os.Stdout, "$ ")
-
 		// Wait for user input
 		command, err := bufio.NewReader(os.Stdin).ReadString('\n')
 
@@ -86,5 +86,6 @@ loop:
 				fmt.Println(command + ": command not found")
 			}
 		}
+		fmt.Fprint(os.Stdout, "$ ")
 	}
 }
