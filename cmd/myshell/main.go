@@ -79,8 +79,9 @@ loop:
 				if err != nil {
 					fmt.Println("Error with LookPath!")
 				}
-				fmt.Printf("Path for %v is %v. \n With args %v \n", cmd, p, args)
-
+				/*
+					fmt.Printf("Path for %v is %v. \n With args %v \n", cmd, p, args)
+				*/
 				c := exec.Command(p, args)
 				if err := c.Run(); err != nil {
 					log.Printf("Command finished with error: %v", err)
