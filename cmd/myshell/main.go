@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"strings"
@@ -11,24 +12,19 @@ import (
 // Ensures gofmt doesn't remove the "fmt" import in stage 1 (feel free to remove this!)
 var _ = fmt.Fprint
 
-func checkIfExcec(s string) string {
-	path, err := exec.LookPath(s)
-	if err == nil {
-		return path
-	}
-	return ""
+func checkIfExcec(s string) bool {
+	_, err := exec.LookPath(s)
+	return err == nil
 
 }
-func checkIfBuiltin(cmd string, execPath string) {
+func checkIfBuiltin(cmd string) {
 
 	s := ""
-	/*
-		res, err := exec.LookPath(cmd)
-	*/
-	if execPath == "" {
+	path, err := exec.LookPath(cmd)
+	if err != nil {
 		s = cmd + ": not found"
 	} else {
-		s = cmd + " is " + execPath
+		s = cmd + " is " + path
 	}
 
 	switch cmd {
@@ -65,7 +61,7 @@ loop:
 		if len(paths) > 1 {
 			args = paths[1]
 		}
-		execPath := checkIfExcec(cmd)
+		isExec := checkIfExcec(cmd)
 
 		switch cmd {
 		case "exit":
@@ -76,10 +72,20 @@ loop:
 		case "echo":
 			fmt.Println(strings.TrimSpace(args))
 		case "type":
-			checkIfBuiltin(strings.TrimSpace(args), execPath)
+			checkIfBuiltin(strings.TrimSpace(args))
 		default:
-			if execPath != "" {
-				exec.Command(cmd, args)
+			if isExec {
+				p, err := exec.LookPath(cmd)
+				if err != nil {
+					fmt.Println("Error with LookPath!")
+				}
+				fmt.Printf("Path for %v is %v. \n With args %v \n", cmd, p, args)
+
+				c := exec.Command(p, args)
+				if err := c.Run(); err != nil {
+					log.Printf("Command finished with error: %v", err)
+				}
+
 			} else {
 				fmt.Println(command + ": command not found")
 			}
