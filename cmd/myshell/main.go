@@ -4,37 +4,59 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/exec"
+	"runtime"
 	"strings"
 )
 
 // Ensures gofmt doesn't remove the "fmt" import in stage 1 (feel free to remove this!)
 var _ = fmt.Fprint
 
-func checkIfBuiltin(t string) {
-	path := os.Getenv("PATH")
-	if path != "" {
-		fmt.Println("PATH is :" + path)
+func get_paths(path string) []string {
+	if runtime.GOOS == "windows" {
+		return strings.Split(path, ";")
+	} else {
+		return strings.Split(path, ":")
 	}
-	paths := strings.Split(path, ":")
-	s := ""
-	if(len(paths)>0) {
-		for i := 0; i < len(paths) i++ {
-			r, err := os.Stat(paths[i])
-			if(err != nil) {
-				fmt.Println("Error occurred: "+ err)	
+}
+func checkExecPath(cmd string) string {
+	fullPaths := os.Getenv("PATH")
+	/*
+		if fullPaths != "" {
+			fmt.Println("PATH is :" + fullPaths)
+		}
+	*/
+	paths := get_paths(fullPaths)
+
+	l := len(paths)
+	if l > 0 {
+		/*
+			fmt.Println("Paths found: ", l)
+			fmt.Println(strings.Join(paths, "'\n'"))
+		*/
+
+		for i := 0; i < len(paths); i++ {
+			_, err := exec.LookPath(paths[i])
+			if err == nil {
+				return cmd + " is " + paths[i]
 			}
-			fmt.Println(r)
 		}
 	}
-	switch t {
+	return cmd + ": not found"
+}
+func checkIfBuiltin(cmd string) {
+
+	s := checkExecPath(cmd)
+
+	switch cmd {
 	case "echo":
-		fmt.Println(t + " is a shell builtin")
+		fmt.Println(cmd + " is a shell builtin")
 	case "exit":
-		fmt.Println(t + " is a shell builtin")
+		fmt.Println(cmd + " 0 is a shell builtin")
 	case "type":
-		fmt.Println(t + " is a shell builtin")
+		fmt.Println(cmd + " is a shell builtin")
 	default:
-		fmt.Println(t + ": not found")
+		fmt.Println(s)
 	}
 }
 func main() {
