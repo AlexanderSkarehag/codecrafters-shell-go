@@ -75,10 +75,13 @@ loop:
 			checkIfBuiltin(strings.TrimSpace(args))
 		default:
 			if isExec {
-				c := exec.Command(cmd, args)
-				if err := c.Run(); err != nil {
+				allArgs := strings.Split(command, " ")
+				c := exec.Command(cmd, allArgs...)
+				output, err := c.CombinedOutput()
+				if err != nil {
 					log.Printf("Command finished with error: %v", err)
 				}
+				fmt.Println(string(output))
 
 			} else {
 				fmt.Println(command + ": command not found")
