@@ -30,10 +30,9 @@ func checkExecPath(cmd string) string {
 
 	l := len(paths)
 	if l > 0 {
-		/*
-			fmt.Println("Paths found: ", l)
-			fmt.Println(strings.Join(paths, "'\n'"))
-		*/
+
+		fmt.Println("Paths found: ", l)
+		fmt.Println(strings.Join(paths, "'\n'"))
 
 		for i := 0; i < len(paths); i++ {
 			_, err := exec.LookPath(paths[i])
