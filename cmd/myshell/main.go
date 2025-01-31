@@ -5,47 +5,21 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"runtime"
 	"strings"
 )
 
 // Ensures gofmt doesn't remove the "fmt" import in stage 1 (feel free to remove this!)
 var _ = fmt.Fprint
 
-func get_paths(path string) []string {
-	if runtime.GOOS == "windows" {
-		return strings.Split(path, ";")
-	} else {
-		return strings.Split(path, ":")
-	}
-}
-func checkExecPath(cmd string) string {
-	fullPaths := os.Getenv("PATH")
-	/*
-		if fullPaths != "" {
-			fmt.Println("PATH is :" + fullPaths)
-		}
-	*/
-	paths := get_paths(fullPaths)
-
-	l := len(paths)
-	if l > 0 {
-
-		fmt.Println("Paths found: ", l)
-		fmt.Println(strings.Join(paths, "'\n'"))
-
-		for i := 0; i < len(paths); i++ {
-			_, err := exec.LookPath(paths[i])
-			if err == nil {
-				return cmd + " is " + paths[i]
-			}
-		}
-	}
-	return cmd + ": not found"
-}
 func checkIfBuiltin(cmd string) {
 
-	s := checkExecPath(cmd)
+	s := ""
+	res, err := exec.LookPath(cmd)
+	if err != nil {
+		s = cmd + ": not found"
+	} else {
+		s = cmd + " is " + res
+	}
 
 	switch cmd {
 	case "echo":
