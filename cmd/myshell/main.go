@@ -30,14 +30,19 @@ func checkIfBuiltin(cmd string) {
 
 	switch cmd {
 	case "echo":
-		fmt.Println(cmd + " is a shell builtin")
+		printShellBuiltin(cmd)
 	case "exit":
-		fmt.Println(cmd + " is a shell builtin")
+		printShellBuiltin(cmd)
 	case "type":
-		fmt.Println(cmd + " is a shell builtin")
+		printShellBuiltin(cmd)
+	case "pwd":
+		printShellBuiltin(cmd)
 	default:
 		fmt.Println(s)
 	}
+}
+func printShellBuiltin(s string) {
+	fmt.Println(s + " is a shell builtin")
 }
 func main() {
 
