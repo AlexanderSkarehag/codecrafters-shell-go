@@ -25,7 +25,7 @@ func checkIfBuiltin(cmd string) {
 	case "echo":
 		fmt.Println(cmd + " is a shell builtin")
 	case "exit":
-		fmt.Println(cmd + " 0 is a shell builtin")
+		fmt.Println(cmd + " is a shell builtin")
 	case "type":
 		fmt.Println(cmd + " is a shell builtin")
 	default:
@@ -69,24 +69,5 @@ loop:
 		default:
 			fmt.Println(command + ": command not found")
 		}
-		/*
-			switch {
-			case command == "exit 0":
-				os.Exit(0)
-				break loop
-			case strings.HasPrefix(command, "echo"):
-				after, hasPrefix := strings.CutPrefix(command, "echo")
-				if hasPrefix {
-					fmt.Println(strings.TrimSpace(after))
-				}
-			case strings.HasPrefix(command, "type"):
-				after, hasFound := strings.CutPrefix(command, "type")
-				if hasFound {
-					checkIfBuiltin(strings.TrimSpace(after))
-				}
-			default:
-				fmt.Println(command + ": command not found")
-			}
-		*/
 	}
 }
