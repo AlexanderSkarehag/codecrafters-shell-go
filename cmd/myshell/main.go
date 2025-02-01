@@ -119,7 +119,7 @@ loop:
 			c := exec.Command(cmd, strings.Split(args, " ")...)
 			o, err := c.Output()
 			if err != nil {
-				log.Printf("Error in CAT!")
+				log.Println("Error in CAT!\n" + err.Error())
 			}
 			fmt.Println(strings.TrimSpace(string(o)))
 
