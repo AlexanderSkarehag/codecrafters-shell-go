@@ -76,7 +76,7 @@ func handlePwd() {
 	fmt.Println(pwd)
 }
 func executeCommands(s string, args ...string) {
-	c := exec.Command(s, args)
+	c := exec.Command(s, args...)
 	c.Stdout = os.Stdout
 	c.Stderr = os.Stderr
 
