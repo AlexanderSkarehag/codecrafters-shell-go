@@ -60,8 +60,8 @@ func getDirectoryPath(s string) string {
 	return p
 }
 func echo(s string) {
-	s = strings.Trim(s, "'")
-	fmt.Println(strings.TrimSpace(s))
+	s = strings.TrimSpace(strings.Trim(s, "'"))
+	fmt.Printf("%v", s)
 }
 func main() {
 
