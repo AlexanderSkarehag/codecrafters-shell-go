@@ -84,14 +84,8 @@ func executeCommands(s string, args ...string) {
 	c.Run()
 }
 func getArgs(s string) []string {
-	list := strings.Split(s, "'")
-	args := []string{}
-	for i := 0; i < len(list); i++ {
-		v := list[i]
-		if v != "" && v != " " {
-			args = append(args, v)
-		}
-	}
+	args := strings.Split(s, "'")
+
 	return args
 }
 func main() {
