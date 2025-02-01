@@ -41,13 +41,16 @@ func printShellBuiltin(s string) {
 }
 func getDirectoryPath(s string) string {
 	if s == "~" {
-		p, err := os.UserHomeDir()
-		if err != nil {
-			fmt.Println("Error in ~ directorypath")
+		p := os.Getenv("HOME")
+		if p == "" {
+			p2, err := os.UserHomeDir()
+			if err != nil {
+				fmt.Println("Error in ~ directorypath")
+			}
+			p = p2
 		}
 
-		fmt.Println(p)
-		return p
+		return strings.TrimSpace(p)
 	}
 
 	p, err := filepath.Abs(s)
