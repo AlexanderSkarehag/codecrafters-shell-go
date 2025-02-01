@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -19,21 +18,21 @@ func checkIfExcec(s string) bool {
 	return err == nil
 
 }
-func checkIfBuiltin(cmd string) {
-
-	builtin := []string{"echo", "exit", "type", "pwd", "cd", "cat"}
-	s := ""
-	path, err := exec.LookPath(cmd)
+func printCommandWithoutBuiltin(s string) {
+	path, err := exec.LookPath(s)
 	if err != nil {
-		s = cmd + ": not found"
+		fmt.Println(s + ": not found")
 	} else {
-		s = cmd + " is " + path
+		fmt.Println(s + " is " + path)
 	}
+}
+func handleTypeCommand(cmd string) {
+	builtin := []string{"echo", "exit", "type", "pwd", "cd", "cat"}
 
 	if slices.Contains(builtin, cmd) {
 		printShellBuiltin(cmd)
 	} else {
-		fmt.Println(s)
+		printCommandWithoutBuiltin(cmd)
 	}
 }
 func printShellBuiltin(s string) {
@@ -69,6 +68,20 @@ func echo(s string) {
 	}
 
 }
+func handlePwd() {
+	pwd, err := os.Getwd()
+	if err != nil {
+		fmt.Println("Error with Getwd!")
+	}
+	fmt.Println(pwd)
+}
+func executeCommands(s string, args ...string) {
+	c := exec.Command(s, args)
+	c.Stdout = os.Stdout
+	c.Stderr = os.Stderr
+
+	c.Run()
+}
 func main() {
 
 	// Uncomment this block to pass the first stage
@@ -103,35 +116,19 @@ loop:
 		case "echo":
 			echo(args)
 		case "type":
-			checkIfBuiltin(strings.TrimSpace(args))
+			handleTypeCommand(strings.TrimSpace(args))
 		case "pwd":
-			pwd, err := os.Getwd()
-			if err != nil {
-				fmt.Println("Error!")
-			}
-			fmt.Println(pwd)
+			handlePwd()
 		case "cd":
 			p := getDirectoryPath(args)
 			if err := os.Chdir(p); err != nil {
 				fmt.Println("cd: " + args + ": No such file or directory")
 			}
 		case "cat":
-			c := exec.Command(cmd, strings.Split(args, " ")...)
-			o, err := c.Output()
-			if err != nil {
-				log.Println("Error in CAT!\n" + err.Error())
-			}
-			fmt.Println(strings.TrimSpace(string(o)))
-
+			executeCommands(cmd, strings.Split(args, " ")...)
 		default:
 			if isExec {
-				c := exec.Command(cmd, strings.TrimSpace(args))
-				output, err := c.Output()
-				if err != nil {
-					log.Printf("Command finished with error: %v", err)
-				}
-				fmt.Println(strings.TrimSpace(string(output)))
-
+				executeCommands(cmd, strings.TrimSpace(args))
 			} else {
 				fmt.Println(command + ": command not found")
 			}
