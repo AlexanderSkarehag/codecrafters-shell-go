@@ -83,10 +83,10 @@ loop:
 		case "cd":
 			p, err := filepath.Abs(args)
 			if err != nil {
-				fmt.Println("Error!")
+				fmt.Println("Error1!")
 			}
 			if err := os.Chdir(p); err != nil {
-				fmt.Println("Error!")
+				fmt.Println("cd: " + args + ": No such file or directory")
 			}
 		default:
 			if isExec {
