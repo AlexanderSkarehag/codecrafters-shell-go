@@ -122,6 +122,6 @@ loop:
 				fmt.Println(command + ": command not found")
 			}
 		}
-		fmt.Fprint(os.Stdout, "$ ")
+		fmt.Fprint(os.Stdout, "\n$ ")
 	}
 }
