@@ -61,7 +61,7 @@ func getDirectoryPath(s string) string {
 }
 func echo(s string) {
 	hasSingleQuotes := strings.HasPrefix(s, "'")
-	s = strings.TrimSpace(strings.Trim(s, "'"))
+	s = strings.TrimSpace(strings.Replace(s, "'", "", -1))
 	if hasSingleQuotes {
 		fmt.Println(s)
 	} else {
