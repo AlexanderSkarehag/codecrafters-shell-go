@@ -59,6 +59,10 @@ func getDirectoryPath(s string) string {
 	}
 	return p
 }
+func echo(s string) {
+	s = strings.Trim(s, "'")
+	fmt.Println(strings.TrimSpace(s))
+}
 func main() {
 
 	// Uncomment this block to pass the first stage
@@ -91,7 +95,7 @@ loop:
 				break loop
 			}
 		case "echo":
-			fmt.Println(strings.TrimSpace(args))
+			echo(args)
 		case "type":
 			checkIfBuiltin(strings.TrimSpace(args))
 		case "pwd":
