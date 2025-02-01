@@ -21,7 +21,7 @@ func checkIfExcec(s string) bool {
 }
 func checkIfBuiltin(cmd string) {
 
-	builtin := []string{"echo", "exit", "type", "pwd", "cd"}
+	builtin := []string{"echo", "exit", "type", "pwd", "cd", "cat"}
 	s := ""
 	path, err := exec.LookPath(cmd)
 	if err != nil {
@@ -115,6 +115,14 @@ loop:
 			if err := os.Chdir(p); err != nil {
 				fmt.Println("cd: " + args + ": No such file or directory")
 			}
+		case "cat":
+			c := exec.Command(cmd, args)
+			o, err := c.Output()
+			if err != nil {
+				log.Printf("Error in CAT!")
+			}
+			fmt.Println(strings.TrimSpace(string(o)))
+
 		default:
 			if isExec {
 				c := exec.Command(cmd, strings.TrimSpace(args))
