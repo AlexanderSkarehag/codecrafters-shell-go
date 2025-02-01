@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"strings"
 )
 
@@ -80,11 +79,11 @@ loop:
 		case "type":
 			checkIfBuiltin(strings.TrimSpace(args))
 		case "pwd":
-			ex, err := os.Executable()
+			pwd, err := os.Getwd()
 			if err != nil {
 				fmt.Println("Error!")
 			}
-			fmt.Println(filepath.Dir(ex))
+			fmt.Println(pwd)
 		default:
 			if isExec {
 				c := exec.Command(cmd, strings.TrimSpace(args))
