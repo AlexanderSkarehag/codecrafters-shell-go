@@ -60,9 +60,10 @@ func getDirectoryPath(s string) string {
 }
 func echo(s string) {
 	hasSingleQuotes := strings.HasPrefix(s, "'")
-	s = strings.TrimSpace(strings.Replace(s, "'", "", -1))
+	//s = strings.TrimSpace(strings.Replace(s, "'", "", -1))
 	if hasSingleQuotes {
-		fmt.Println(s)
+		l := getArgs(s)
+		fmt.Println(strings.Join(l, ""))
 	} else {
 		fmt.Println(strings.Join(strings.Fields(s), " "))
 	}
@@ -81,6 +82,17 @@ func executeCommands(s string, args ...string) {
 	c.Stderr = os.Stderr
 
 	c.Run()
+}
+func getArgs(s string) []string {
+	list := strings.Split(s, "'")
+	args := []string{}
+	for i := 0; i < len(list); i++ {
+		v := list[i]
+		if v != "" && v != " " {
+			args = append(args, v)
+		}
+	}
+	return args
 }
 func main() {
 
@@ -125,7 +137,10 @@ loop:
 				fmt.Println("cd: " + args + ": No such file or directory")
 			}
 		case "cat":
-			executeCommands(cmd, strings.Split(args, " ")...)
+			//getDirectoryPath(args)
+
+			l := getArgs(args)
+			executeCommands(cmd, l...)
 		default:
 			if isExec {
 				executeCommands(cmd, strings.TrimSpace(args))
