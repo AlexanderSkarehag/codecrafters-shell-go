@@ -27,7 +27,7 @@ func printCommandWithoutBuiltin(s string) {
 	}
 }
 func handleTypeCommand(cmd string) {
-	builtin := []string{"echo", "exit", "type", "pwd", "cd", "cat"}
+	builtin := []string{"echo", "exit", "type", "pwd", "cd"}
 
 	if slices.Contains(builtin, cmd) {
 		printShellBuiltin(cmd)
