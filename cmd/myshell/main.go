@@ -39,6 +39,23 @@ func checkIfBuiltin(cmd string) {
 func printShellBuiltin(s string) {
 	fmt.Println(s + " is a shell builtin")
 }
+func getDirectoryPath(s string) string {
+	if s == "~" {
+		p, err := os.UserHomeDir()
+		if err != nil {
+			fmt.Println("Error in ~ directorypath")
+		}
+
+		fmt.Println(p)
+		return p
+	}
+
+	p, err := filepath.Abs(s)
+	if err != nil {
+		fmt.Println("Error1!")
+	}
+	return p
+}
 func main() {
 
 	// Uncomment this block to pass the first stage
@@ -81,10 +98,7 @@ loop:
 			}
 			fmt.Println(pwd)
 		case "cd":
-			p, err := filepath.Abs(args)
-			if err != nil {
-				fmt.Println("Error1!")
-			}
+			p := getDirectoryPath(args)
 			if err := os.Chdir(p); err != nil {
 				fmt.Println("cd: " + args + ": No such file or directory")
 			}
