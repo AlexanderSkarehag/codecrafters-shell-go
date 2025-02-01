@@ -60,8 +60,14 @@ func getDirectoryPath(s string) string {
 	return p
 }
 func echo(s string) {
+	hasSingleQuotes := strings.HasPrefix(s, "'")
 	s = strings.TrimSpace(strings.Trim(s, "'"))
-	fmt.Printf("%v", s)
+	if hasSingleQuotes {
+		fmt.Println(s)
+	} else {
+		fmt.Println(strings.Join(strings.Fields(s), " "))
+	}
+
 }
 func main() {
 
@@ -122,6 +128,6 @@ loop:
 				fmt.Println(command + ": command not found")
 			}
 		}
-		fmt.Fprint(os.Stdout, "\n$ ")
+		fmt.Fprint(os.Stdout, "$ ")
 	}
 }
