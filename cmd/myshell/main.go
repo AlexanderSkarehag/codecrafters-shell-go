@@ -6,6 +6,8 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
+	"slices"
 	"strings"
 )
 
@@ -19,6 +21,7 @@ func checkIfExcec(s string) bool {
 }
 func checkIfBuiltin(cmd string) {
 
+	builtin := []string{"echo", "exit", "type", "pwd", "cd"}
 	s := ""
 	path, err := exec.LookPath(cmd)
 	if err != nil {
@@ -27,16 +30,9 @@ func checkIfBuiltin(cmd string) {
 		s = cmd + " is " + path
 	}
 
-	switch cmd {
-	case "echo":
+	if slices.Contains(builtin, cmd) {
 		printShellBuiltin(cmd)
-	case "exit":
-		printShellBuiltin(cmd)
-	case "type":
-		printShellBuiltin(cmd)
-	case "pwd":
-		printShellBuiltin(cmd)
-	default:
+	} else {
 		fmt.Println(s)
 	}
 }
@@ -84,6 +80,14 @@ loop:
 				fmt.Println("Error!")
 			}
 			fmt.Println(pwd)
+		case "cd":
+			p, err := filepath.Abs(args)
+			if err != nil {
+				fmt.Println("Error!")
+			}
+			if err := os.Chdir(p); err != nil {
+				fmt.Println("Error!")
+			}
 		default:
 			if isExec {
 				c := exec.Command(cmd, strings.TrimSpace(args))
