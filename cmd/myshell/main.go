@@ -116,7 +116,7 @@ loop:
 				fmt.Println("cd: " + args + ": No such file or directory")
 			}
 		case "cat":
-			c := exec.Command("cmd", command)
+			c := exec.Command(cmd, strings.Split(command, " ")...)
 			o, err := c.Output()
 			if err != nil {
 				log.Printf("Error in CAT!")
