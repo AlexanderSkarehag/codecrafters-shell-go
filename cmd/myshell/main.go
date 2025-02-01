@@ -58,6 +58,14 @@ func getDirectoryPath(s string) string {
 	}
 	return p
 }
+func getDirectoryPaths(args []string) []string {
+	l := []string{}
+	for i := 0; i < len(args); i++ {
+		path := getDirectoryPath(args[i])
+		l = append(l, path)
+	}
+	return l
+}
 func echo(s string) {
 	hasSingleQuotes := strings.HasPrefix(s, "'")
 	//s = strings.TrimSpace(strings.Replace(s, "'", "", -1))
@@ -86,6 +94,17 @@ func executeCommands(s string, args ...string) {
 func getArgs(s string) []string {
 	args := strings.Split(s, "'")
 
+	return args
+}
+func getArgsWithoutSpaces(s string) []string {
+	list := strings.Split(s, "'")
+	args := []string{}
+	for i := 0; i < len(list); i++ {
+		v := list[i]
+		if v != "" && v != " " {
+			args = append(args, v)
+		}
+	}
 	return args
 }
 func main() {
@@ -133,7 +152,7 @@ loop:
 		case "cat":
 			//getDirectoryPath(args)
 
-			l := getArgs(args)
+			l := getDirectoryPaths(getArgsWithoutSpaces(args))
 			executeCommands(cmd, l...)
 		default:
 			if isExec {
