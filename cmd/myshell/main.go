@@ -110,9 +110,14 @@ func getArgsWithoutSpaces(s string, delimiter string, handleFiles bool) []string
 
 	for i := 0; i < len(list); i++ {
 		v := list[i]
+		pathAndName := strings.SplitN(v, " ", 2)
+		if handleFiles && len(pathAndName) > 1 {
 
-		if handleFiles {
-			pathAndName := strings.SplitN(v, " ", 2)
+			/*fmt.Printf("Length of pathandname var is %v", len(pathAndName))
+			for i := 0; i < len(pathAndName); i++ {
+				fmt.Print(pathAndName[i])
+			}
+			*/
 			items := []string{}
 
 			items = append(items, strings.TrimSpace(pathAndName[0]))
