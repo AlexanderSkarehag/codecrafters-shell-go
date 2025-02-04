@@ -68,9 +68,13 @@ func getDirectoryPaths(args []string) []string {
 }
 func echo(s string) {
 	hasSingleQuotes := strings.HasPrefix(s, "'")
-	//s = strings.TrimSpace(strings.Replace(s, "'", "", -1))
+	hasDoubleQuotes := strings.HasPrefix(s, "\"")
+
 	if hasSingleQuotes {
-		l := getArgs(s)
+		l := getArgs(s, "'")
+		fmt.Println(strings.Join(l, ""))
+	} else if hasDoubleQuotes {
+		l := getArgs(s, "\"")
 		fmt.Println(strings.Join(l, ""))
 	} else {
 		fmt.Println(strings.Join(strings.Fields(s), " "))
@@ -91,8 +95,8 @@ func executeCommands(s string, args ...string) {
 
 	c.Run()
 }
-func getArgs(s string) []string {
-	args := strings.Split(s, "'")
+func getArgs(s string, delimiter string) []string {
+	args := strings.Split(s, delimiter)
 
 	return args
 }
@@ -150,8 +154,6 @@ loop:
 				fmt.Println("cd: " + args + ": No such file or directory")
 			}
 		case "cat":
-			//getDirectoryPath(args)
-
 			l := getDirectoryPaths(getArgsWithoutSpaces(args))
 			executeCommands(cmd, l...)
 		default:
