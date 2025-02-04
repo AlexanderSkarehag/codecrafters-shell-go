@@ -105,9 +105,9 @@ func getArgsWithoutSpaces(s string, delimiter string) []string {
 	args := []string{}
 	for i := 0; i < len(list); i++ {
 		v := list[i]
-		v2 := v
-		if len(strings.TrimSpace(v)) > 0 {
-			args = append(args, v2)
+		vList := strings.Split(v, " ")
+		if len(vList) > 1 || (vList[0] != "" && vList[0] != " ") {
+			args = append(args, v)
 		}
 	}
 	return args
