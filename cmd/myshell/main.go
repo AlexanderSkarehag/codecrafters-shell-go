@@ -75,6 +75,10 @@ func echo(s string) {
 		fmt.Println(strings.Join(l, ""))
 	} else if hasDoubleQuotes {
 		l := getArgsWithoutSpaces(s, "\"")
+		s := ""
+		for i := 0; i < len(l); i++ {
+			s += l[i]
+		}
 		fmt.Println(strings.Join(l, ""))
 	} else {
 		fmt.Println(strings.Join(strings.Fields(s), " "))
@@ -105,8 +109,18 @@ func getArgsWithoutSpaces(s string, delimiter string) []string {
 	args := []string{}
 	for i := 0; i < len(list); i++ {
 		v := list[i]
-		vList := strings.Split(v, " ")
-		if len(vList) > 1 || (vList[0] != "" && vList[0] != " ") {
+
+		if i > 0 && v != list[len(list)-1] {
+			even := i % 2
+			if even != 0 {
+				s = s[len(v)+2:] //+2 for the "
+			} else {
+				s = s[len(v):]
+			}
+			if even == 0 {
+				v = " "
+			}
+
 			args = append(args, v)
 		}
 	}
