@@ -74,7 +74,7 @@ func echo(s string) {
 		l := getArgs(s, "'")
 		fmt.Println(strings.Join(l, ""))
 	} else if hasDoubleQuotes {
-		l := getArgs(s, "\"")
+		l := getArgsWithoutSpaces(s, "\"")
 		fmt.Println(strings.Join(l, ""))
 	} else {
 		fmt.Println(strings.Join(strings.Fields(s), " "))
@@ -100,13 +100,14 @@ func getArgs(s string, delimiter string) []string {
 
 	return args
 }
-func getArgsWithoutSpaces(s string) []string {
-	list := strings.Split(s, "'")
+func getArgsWithoutSpaces(s string, delimiter string) []string {
+	list := strings.Split(s, delimiter)
 	args := []string{}
 	for i := 0; i < len(list); i++ {
 		v := list[i]
-		if v != "" && v != " " {
-			args = append(args, v)
+		v2 := v
+		if len(strings.TrimSpace(v)) > 0 {
+			args = append(args, v2)
 		}
 	}
 	return args
@@ -154,7 +155,14 @@ loop:
 				fmt.Println("cd: " + args + ": No such file or directory")
 			}
 		case "cat":
-			l := getDirectoryPaths(getArgsWithoutSpaces(args))
+			singleQ := strings.HasPrefix(args, "'")
+			delimiter := ""
+			if singleQ {
+				delimiter = "'"
+			} else {
+				delimiter = "\""
+			}
+			l := getDirectoryPaths(getArgsWithoutSpaces(args, delimiter))
 			executeCommands(cmd, l...)
 		default:
 			if isExec {
