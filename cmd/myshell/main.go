@@ -126,6 +126,18 @@ func getArgsWithoutSpaces(s string, delimiter string) []string {
 	}
 	return args
 }
+func getArgsWithoutSpacesCat(s string) []string {
+	list := strings.Split(s, "'")
+	args := []string{}
+
+	for i := 0; i < len(list); i++ {
+		v := list[i]
+		if v != "" && v != " " {
+			args = append(args, v)
+		}
+	}
+	return args
+}
 func main() {
 
 	// Uncomment this block to pass the first stage
@@ -169,14 +181,15 @@ loop:
 				fmt.Println("cd: " + args + ": No such file or directory")
 			}
 		case "cat":
-			singleQ := strings.HasPrefix(args, "'")
+			/*singleQ := strings.HasPrefix(args, "'")
 			delimiter := ""
 			if singleQ {
 				delimiter = "'"
 			} else {
 				delimiter = "\""
 			}
-			l := getDirectoryPaths(getArgsWithoutSpaces(args, delimiter))
+			*/
+			l := getDirectoryPaths(getArgsWithoutSpacesCat(args))
 			executeCommands(cmd, l...)
 		default:
 			if isExec {
