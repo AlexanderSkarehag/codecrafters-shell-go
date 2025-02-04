@@ -113,9 +113,11 @@ func getArgsWithoutSpaces(s string, delimiter string, handleFiles bool) []string
 
 		if handleFiles {
 			pathAndName := strings.SplitN(v, " ", 2)
-			pathAndName[0] = strings.TrimSpace(pathAndName[0])
-			pathAndName[1] = strings.TrimSpace(pathAndName[1])
-			v = strings.Join(pathAndName, " ")
+			items := []string{}
+
+			items = append(items, strings.TrimSpace(pathAndName[0]))
+			items = append(items, strings.TrimSpace(pathAndName[1]))
+			v = strings.Join(items, " ")
 		}
 
 		if i > 0 && v != list[len(list)-1] {
