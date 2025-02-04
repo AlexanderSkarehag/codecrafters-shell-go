@@ -74,7 +74,7 @@ func echo(s string) {
 		l := getArgs(s, "'")
 		fmt.Println(strings.Join(l, ""))
 	} else if hasDoubleQuotes {
-		l := getArgsWithoutSpaces(s, "\"")
+		l := getArgsWithoutSpaces(s, "\"", false)
 		s := ""
 		for i := 0; i < len(l); i++ {
 			s += l[i]
@@ -104,11 +104,19 @@ func getArgs(s string, delimiter string) []string {
 
 	return args
 }
-func getArgsWithoutSpaces(s string, delimiter string) []string {
+func getArgsWithoutSpaces(s string, delimiter string, handleFiles bool) []string {
 	list := strings.Split(s, delimiter)
 	args := []string{}
+
 	for i := 0; i < len(list); i++ {
 		v := list[i]
+
+		if handleFiles {
+			pathAndName := strings.SplitN(v, " ", 2)
+			pathAndName[0] = strings.TrimSpace(pathAndName[0])
+			pathAndName[1] = strings.TrimSpace(pathAndName[1])
+			v = strings.Join(pathAndName, " ")
+		}
 
 		if i > 0 && v != list[len(list)-1] {
 			even := i % 2
@@ -124,20 +132,10 @@ func getArgsWithoutSpaces(s string, delimiter string) []string {
 			args = append(args, v)
 		}
 	}
-	return args
-}
-func getArgsWithoutSpacesCat(s string) []string {
-	list := strings.Split(s, "'")
-	args := []string{}
 
-	for i := 0; i < len(list); i++ {
-		v := list[i]
-		if v != "" && v != " " {
-			args = append(args, v)
-		}
-	}
 	return args
 }
+
 func main() {
 
 	// Uncomment this block to pass the first stage
@@ -181,15 +179,14 @@ loop:
 				fmt.Println("cd: " + args + ": No such file or directory")
 			}
 		case "cat":
-			/*singleQ := strings.HasPrefix(args, "'")
+			singleQ := strings.HasPrefix(args, "'")
 			delimiter := ""
 			if singleQ {
 				delimiter = "'"
 			} else {
 				delimiter = "\""
 			}
-			*/
-			l := getDirectoryPaths(getArgsWithoutSpacesCat(args))
+			l := getDirectoryPaths(getArgsWithoutSpaces(args, delimiter, true))
 			executeCommands(cmd, l...)
 		default:
 			if isExec {
